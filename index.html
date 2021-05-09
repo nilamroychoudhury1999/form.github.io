@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" id="namebox">NAME</input><br><br>
+    <input type="text" id="rollbox">Roll No</input><br><br>
+    <input type="text" id="secbox">Section</input><br><br>
+    <input type="text" id="genbox">Gender</input><br><br>
+    <br><br>
+    <button id="insert">INSERT</button>
+    <button id="select">SELECT</button>
+    <button id="update">UPDATE</button>
+    <button id="delete">DELETE</button>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-database.js"></script>
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-auth.js"></script>
+
+    <script id="MainScript">
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+            apiKey: "AIzaSyAq3WBKKbmMmGDd9264MXtWs5MX121ZDks",
+            authDomain: "form-ca7cc.firebaseapp.com",
+            databaseURL: "https://form-ca7cc-default-rtdb.firebaseio.com",
+            projectId: "form-ca7cc",
+            storageBucket: "form-ca7cc.appspot.com",
+            messagingSenderId: "1054208318782",
+            appId: "1:1054208318782:web:e820f1cb9b943f007aa06f",
+            measurementId: "G-5CQ6L49Q0E"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+
+        var nameV, rollV, secV, genV;
+
+        function Ready() {
+            nameV = document.getElementById('namebox').value;
+            rollV = document.getElementById('rollbox').value;
+            secV = document.getElementById('secbox').value;
+            genV = document.getElementById('genbox').value;
+        }
+        document.getElementById('insert').onclick = function() {
+            Ready();
+            firebase.database().ref('student/' + rollV).set({
+                NameofStudent: nameV,
+                RollNo: rollV,
+                section: secV,
+                Gender: genV
+            });
+        }
+        document.getElementById('select').onclick = function() {
+            Ready();
+            firebase.database().ref('student/' + rollV).on('value', function(snapshot) {
+                nameV = document.getElementById('namebox').value = snapshot.val().NameofStudent;
+
+                secV = document.getElementById('secbox').value = snapshot.val().section;
+                genV = document.getElementById('genbox').value = snapshot.val().Gender;
+
+            });
+        }
+        document.getElementById('update').onclick = function() {
+            Ready();
+            firebase.database().ref('student/' + rollV).update({
+                NameofStudent: nameV,
+
+                section: secV,
+                Gender: genV
+            });
+        }
+        document.getElementById('delete').onclick = function() {
+            Ready();
+            firebase.database().ref('student/' + rollV).remove();
+        }
+    </script>
+
+</body>
+
+</html>
